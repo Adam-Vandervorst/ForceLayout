@@ -13,7 +13,6 @@ class App {
 			alpha: false,
 			desynchronized: true,
 			powerPreference: "high-performance",
-			failIfMajorPerformanceCaveat: true,
 			antialias: antialias
 		})
 
@@ -22,7 +21,7 @@ class App {
 		window.addEventListener("resize", () => this.resetCanvas())
 	}
 
-	setupUpdate({stiffness=800., repulsion=400., damping=.25, energy_threshold=1e-5, step_size=5, max_speed=10}) {
+	setupUpdate({stiffness=800., repulsion=400., damping=.25, energy_threshold=1e-5, step_size=2, max_speed=10}) {
 		this.layout = new Layout(this.graph, stiffness, repulsion, damping, energy_threshold, max_speed)
 
 		this.currentBB = this.layout.getBoundingBox()
