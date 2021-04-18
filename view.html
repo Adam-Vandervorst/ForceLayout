@@ -1,0 +1,28 @@
+<html lang="en">
+<head>
+    <title>Force layout</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="board">
+    <canvas></canvas>
+</div>
+<script src="vector.js"></script>
+<script src="physics.js"></script>
+<script src="drawing.js"></script>
+<script src="formal.js"></script>
+<script src="app.js"></script>
+<script>
+    const graph = Graph.genWithinSphere(200, 2, .2)
+    //const graph = Graph.genWithinSphere(140, 3, .22).masked((n, g) => g.neighbors(n).length > 0)
+    //const graph = Graph.genErosRenyi(50, 100)
+    //const graph = Graph.genTree(3, 3)
+
+    const app = new App({graph: graph, repulsion: 200., stiffness: 500, damping: 0.3, energy_threshold: 0.01, max_speed: 1});
+</script>
+
+</body>
+</html>
