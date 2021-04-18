@@ -11,7 +11,7 @@ _test_canvas.width = _test_canvas.height = 1
 const measureText = (text, font) => {
 	_test_ctx.font = font
 	const rect = _test_ctx.measureText(text)
-	return [rect.width, rect.fontBoundingBoxAscent]
+	return [rect.width, rect.actualBoundingBoxAscent]
 }
 
 const getDim = (item, font) => {
@@ -20,7 +20,7 @@ const getDim = (item, font) => {
 	else if (item._width !== undefined && item._height !== undefined)
 		return new Vector(item._width, item._height)
 	else
-		[item._width, item._height] = measureText(item.data.label, font)
+		[item._width, item._height] = measureText(item.data.label || item.id, font)
 	return getDim(item, font)
 }
 
@@ -89,21 +89,33 @@ class RendererGraph {
 	drawNode(node, p) {
 		const s = this.project(p)
 
-		const padding = Vector.unit().multiply(6)
-
-		let contentSize = getDim(node, this.node_font)
-
-		const box = contentSize.add(padding)
-		this.ctx.fillStyle = node.data.color || "#FFFFFF"
-		this.ctx.fillRect(...s.subtract(box.divide(2)), ...box)
-
-		const tl = s.subtract(contentSize.divide(2)).round("down")
-		if (node.data.image !== undefined) {
-			this.ctx.drawImage(node.data.image, ...tl)
+		if (node.data.colors && !node.data.label) {
+			const n = node.data.colors.length;
+			node.data.colors.forEach((c, i) => {
+				this.ctx.beginPath();
+				this.ctx.moveTo(...s);
+				this.ctx.arc(...s, 10, (.5 + 2*i/n)*Math.PI, (.5 + 2*(i + 1)/n)*Math.PI);
+				this.ctx.lineTo(...s);
+				this.ctx.closePath();
+				this.ctx.fillStyle = c;
+				this.ctx.fill();
+			})
 		} else {
-			this.ctx.fillStyle = "#000000"
-			const text = (node.data.label !== undefined) ? node.data.label : node.id
-			this.ctx.fillText(text, ...tl)
+			const padding = Vector.unit().multiply(6)
+			const contentSize = getDim(node, this.node_font)
+
+			const box = contentSize.add(padding)
+			this.ctx.fillStyle = node.data.color || "#FFFFFF"
+			this.ctx.fillRect(...s.subtract(box.divide(2)), ...box)
+
+			const tl = s.subtract(contentSize.divide(2)).round("down")
+			if (node.data.image !== undefined) {
+				this.ctx.drawImage(node.data.image, ...tl)
+			} else {
+				this.ctx.fillStyle = "#000000"
+				const text = (node.data.label !== undefined) ? node.data.label : node.id
+				this.ctx.fillText(text, ...tl)
+			}
 		}
 	}
 

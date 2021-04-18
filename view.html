@@ -16,12 +16,18 @@
 <script src="formal.js"></script>
 <script src="app.js"></script>
 <script>
-    const graph = Graph.genWithinSphere(200, 2, .2)
+    //const graph = Graph.genWithinSphere(200, 2, .2)
     //const graph = Graph.genWithinSphere(140, 3, .22).masked((n, g) => g.neighbors(n).length > 0)
     //const graph = Graph.genErosRenyi(50, 100)
     //const graph = Graph.genTree(3, 3)
+    //const graph = Graph.genPath(4)
 
-    const app = new App({graph: graph, repulsion: 200., stiffness: 500, damping: 0.3, energy_threshold: 0.01, max_speed: 1});
+    const graph = Graph.genPath(5, true).product(Graph.genPath(2), "tensor")
+    //const graph = Graph.genPath(4).product(Graph.genPath(4))
+    //const graph = Graph.genPath(3, true).product(Graph.genPath(3), "cartesian")
+    //const graph = Graph.genPath(4).product(Graph.genPath(2), "strong")
+
+    const app = new App({graph: graph, repulsion: 200., stiffness: 500, damping: 0.22, energy_threshold: 0.01, max_speed: 1});
 </script>
 
 </body>
