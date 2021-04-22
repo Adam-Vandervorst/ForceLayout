@@ -174,10 +174,11 @@ class Graph {
         const g = new Graph()
         const l2 = (u, v) => Math.sqrt(u.reduce((t, a, i) => t + Math.pow(a-v[i], 2), 0.))
         const gen_pos = () => Array(dimensions).fill().map(_ => Math.random())
+        const color_pos = {1: p => color1d(p[0]), 2: p => color2d(100, p), 3: p => rgbToHex(...p.map(v => 255*v))}[dimensions]
         const nodes = []
 
         while (--n) {
-            const pos = gen_pos(), color = pos.length == 2 ? color2d(100, pos) : undefined
+            const pos = gen_pos(),  color = color_pos && color_pos(pos)
             nodes.push(g.addNode({label: `${n}`, pos: pos, color: color}))
         }
 
