@@ -51,7 +51,7 @@ class RendererGraph {
     	const s1 = this.project(p1), s2 = this.project(p2)
 
 		const direction = s2.subtract(s1)
-		const normal = direction.normalise()
+		const normal = direction.normalized()
 
 		this.ctx.lineWidth = Math.max(2*edge.data.weight || 2.0, 0.1)
 

@@ -49,7 +49,7 @@ class Layout {
                 if (point1 === point2) return
 
                 const d = point1.p.subtract(point2.p)
-                const distance = d.magnitude(), direction = d.normalise()
+                const distance = d.norm(), direction = d.normalized()
 
                 const force = direction.multiply(this.repulsion).divide(Math.pow(distance, 2)/2)
 
@@ -62,8 +62,8 @@ class Layout {
     applyHookesLaw() {
         this.mapSprings((_, spring) => {
             const d = spring.point2.p.subtract(spring.point1.p)
-            const displacement = spring.equilibrium - d.magnitude()
-            const direction = d.normalise()
+            const displacement = spring.equilibrium - d.norm()
+            const direction = d.normalized()
 
             const force = direction.multiply(-spring.k*displacement)
 
@@ -89,7 +89,7 @@ class Layout {
             const new_speed = point.v.add(point.a.multiply(delta)).multiply(this.damping)
             point.a = Vector.zero()
 
-            if (point.energy(new_speed.magnitude()) < activation_energy)
+            if (point.energy(new_speed.norm()) < activation_energy)
                 return point.v = Vector.zero()
 
             point.v = new_speed.clipNorm(this.max_speed)
@@ -112,7 +112,7 @@ class Layout {
         let min = {node: null, point: null, distance: Infinity}
 
         this.mapPoints((n, point) => {
-            const distance = point.p.subtract(pos).magnitude()
+            const distance = point.p.subtract(pos).norm()
 
             if (distance < min.distance)
                 min = {node: n, point: point, distance: distance}
@@ -144,12 +144,12 @@ Layout.Point = class Point {
 
     applyForce(force) {
         const max_update = 1e2
-        if (force.magnitude() < 1) return
+        if (force.norm() < 1) return
         this.a = this.a.add(force.clipNorm(max_update).divide(this.m))
     }
 
     energy(hypothetical) {
-        return this.m*Math.pow(hypothetical || this.v.magnitude(), 2)/2
+        return this.m*Math.pow(hypothetical || this.v.norm(), 2)/2
     }
 }
 
@@ -162,13 +162,13 @@ Layout.Spring = class Spring {
     }
 
     distanceToPoint(point) {
-        const n = this.point2.p.subtract(this.point1.p).normalise().normal()
+        const n = this.point2.p.subtract(this.point1.p).normalized().normal()
         const ac = point.p.subtract(this.point1.p)
         return Math.abs(ac.inner(n))
     }
 
     energy(hypothetical) {
-        const length = this.point2.p.subtract(this.point1.p).magnitude()
+        const length = this.point2.p.subtract(this.point1.p).norm()
         return this.k*Math.pow(hypothetical || (this.equilibrium - length), 2)/2
     }
 }
