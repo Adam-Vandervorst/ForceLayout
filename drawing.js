@@ -30,9 +30,8 @@ class RendererGraph {
         this.ctx = ctx
         this.project = project
 
-        this.backgound_color = "#272727"
-        this.node_font = "14px Garamond, sans-serif"
-        this.edge_font = "12px Garamond, sans-serif"
+        this.backgound_color = "#222222"
+        this.font = "14px system-ui, sans-serif"
     }
 
     clear() {
@@ -43,7 +42,7 @@ class RendererGraph {
     edgeContext() {
         this.ctx.textAlign = "center"
         this.ctx.textBaseline = "top"
-        this.ctx.font = this.edge_font
+        this.ctx.font = this.font
         this.ctx.fillStyle = "#000000"
     }
 
@@ -83,7 +82,7 @@ class RendererGraph {
     nodeContext() {
         this.ctx.textAlign = "left"
         this.ctx.textBaseline = "top"
-        this.ctx.font = this.node_font
+        this.ctx.font = this.font
     }
 
     drawNode(node, p) {
@@ -102,7 +101,7 @@ class RendererGraph {
             })
         } else {
             const padding = Vector.unit().multiply(6)
-            const contentSize = getDim(node, this.node_font)
+            const contentSize = getDim(node, this.font)
 
             const box = contentSize.add(padding)
             this.ctx.fillStyle = node.data.color || "#FFFFFF"

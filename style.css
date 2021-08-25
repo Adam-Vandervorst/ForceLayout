@@ -1,11 +1,26 @@
 :root {
-    --background-color: #272727;
-    --text-color: #6679;
+    --background-color: #faf9f8;
+    --medium-color: #aab;
+    --contrast-color: #333;
+    --contrast-text: rgb(15, 15, 15);
+    --faint-text: #778;
+    font-size: calc(10px + (16 - 10) * ((100vh - 370px) / (1000 - 370)));
+    font-family: system-ui, sans-serif;
+}
+
+head.dark-mode + body {
+    --background-color: #222222;
+    --medium-color: #404044;
+    --contrast-color: #ccc;
+    --contrast-text: rgb(240, 240, 240);
+    --faint-text: #666;
 }
 
 body {
     margin: 0;
-    font-family: Arial, Courier, sans-serif;
+    overflow: hidden;
+    font-family: system-ui, sans-serif;
+    background-color: var(--background-color);
 }
 
 canvas {
