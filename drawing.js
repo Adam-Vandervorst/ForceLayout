@@ -6,6 +6,9 @@ const isTouch = e => {
     }
 }
 
+const computed_style = getComputedStyle(document.body)
+const css_var = name => computed_style.getPropertyValue(name).trim()
+
 const _test_canvas = document.createElement('canvas'), _test_ctx = _test_canvas.getContext("2d")
 _test_canvas.width = _test_canvas.height = 1
 const measureText = (text, font) => {
@@ -30,12 +33,11 @@ class RendererGraph {
         this.ctx = ctx
         this.project = project
 
-        this.backgound_color = "#222222"
-        this.font = "14px system-ui, sans-serif"
+        this.font = `${css_var("font-size")}, ${css_var("font-family")}`
     }
 
     clear() {
-        this.ctx.fillStyle = this.backgound_color
+        this.ctx.fillStyle = css_var("--background-color")
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
     }
 
@@ -43,7 +45,7 @@ class RendererGraph {
         this.ctx.textAlign = "center"
         this.ctx.textBaseline = "top"
         this.ctx.font = this.font
-        this.ctx.fillStyle = "#000000"
+        this.ctx.fillStyle = css_var("--contrast-text")
     }
 
     drawEdge(edge, p1, p2) {
@@ -61,7 +63,6 @@ class RendererGraph {
         this.ctx.stroke()
 
         if (edge.data.label) {
-            console.log(edge.id)
             let text = edge.data.label
 
             let angle = s2.subtract(s1).angle()
@@ -111,7 +112,7 @@ class RendererGraph {
             if (node.data.image !== undefined) {
                 this.ctx.drawImage(node.data.image, ...tl)
             } else {
-                this.ctx.fillStyle = "#000000"
+                this.ctx.fillStyle = css_var("--background-color")
                 const text = (node.data.label !== undefined) ? node.data.label : node.id
                 this.ctx.fillText(text, ...tl)
             }
